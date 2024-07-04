@@ -370,6 +370,11 @@ func (mc *xlsxMergeCells) getExtent(cellRef string) (int, int, error) {
 	}
 	if cell, ok := mc.CellsMap[cellRef]; ok {
 		parts := strings.Split(cell.Ref, ":")
+
+		// New excel versions for single merged cells store just one coord
+		if len(parts) == 1 {
+			parts = append(parts, parts[0])
+		}
 		startx, starty, err := GetCoordsFromCellIDString(parts[0])
 		if err != nil {
 			return wrap(err)
